@@ -1,34 +1,36 @@
---°¢ Å×ÀÌºíÀÇ PK ½Äº°¹øÈ£´Â "create sequence" ´ë½Å max+1 »ç¿ë °í·Á Áß
---ÇÑ±ÛÀº 3byte
+--ê° í…Œì´ë¸”ì˜ PK ì‹ë³„ë²ˆí˜¸ëŠ” "create sequence" ëŒ€ì‹  max+1 ì‚¬ìš© ê³ ë ¤ ì¤‘
+--í•œê¸€ì€ 3byte
 
---ÀÏ¹İÈ¸¿ø Å×ÀÌºí
+--ì¼ë°˜íšŒì› í…Œì´ë¸”
 DROP TABLE tb_user;
 CREATE TABLE tb_user (
 user_no NUMBER(6),
-user_id VARCHAR2(20) NOT NULL,
-user_pw VARCHAR2(16) NOT NULL,
-user_name VARCHAR2(21) NOT NULL,
-user_phone VARCHAR2(13) NOT NULL,
-user_email VARCHAR2(300) NOT NULL,
+user_id VARCHAR2(100) NOT NULL,     -- ì˜ë¬¸+ìˆ«ì ìµœëŒ€ 21ì
+user_pw VARCHAR2(100) NOT NULL,
+user_name VARCHAR2(100) NOT NULL,   -- í•œê¸€ ìµœëŒ€ 7ì
+user_phone VARCHAR2(13) NOT NULL,   -- í•˜ì´í”ˆ ì œì™¸
+user_email VARCHAR2(100) NOT NULL,  -- @ë„ë©”ì¸ í¬í•¨ ìµœëŒ€ 100ì
 user_regist_date DATE DEFAULT SYSDATE,
 user_update_date DATE DEFAULT SYSDATE,
-user_level VARCHAR2(1) DEFAULT '3',
+user_login_date DATE DEFAULT SYSDATE,
+user_level VARCHAR2(10) DEFAULT 'Lv3',
 CONSTRAINT tb_user_pk PRIMARY KEY(user_no),
-CONSTRAINT tb_user_level_ck CHECK (user_level IN('1','2','3'))
+CONSTRAINT tb_user_level_ck CHECK (user_level IN('Lv1','Lv2','Lv3'))
 );
 
-COMMENT ON TABLE tb_user IS '±âº»È¸¿ø Á¤º¸';
-COMMENT ON COLUMN tb_user.user_no IS 'È¸¿ø¹øÈ£';
-COMMENT ON COLUMN tb_user.user_id IS 'È¸¿ø ¾ÆÀÌµğ';
-COMMENT ON COLUMN tb_user.user_pw IS 'È¸¿ø ºñ¹Ğ¹øÈ£';
-COMMENT ON COLUMN tb_user.user_name IS 'È¸¿øÀÌ¸§';
-COMMENT ON COLUMN tb_user.user_phone IS 'È¸¿ø ÀüÈ­¹øÈ£';
-COMMENT ON COLUMN tb_user.user_email IS 'È¸¿ø ÀÌ¸ŞÀÏ';
-COMMENT ON COLUMN tb_user.user_regist_date IS 'È¸¿ø °¡ÀÔÀÏ';
-COMMENT ON COLUMN tb_user.user_update_date IS 'È¸¿ø ¼öÁ¤ÀÏ';
-COMMENT ON COLUMN tb_user.user_level IS 'È¸¿ø ±ÇÇÑ µî±Ş(1:°ü¸®ÀÚ, 2:°­»ç+ÀÏ¹İÈ¸¿ø, 3:ÀÏ¹İÈ¸¿ø(±âº»°ª))';
+COMMENT ON TABLE tb_user IS 'ê¸°ë³¸íšŒì› ì •ë³´';
+COMMENT ON COLUMN tb_user.user_no IS 'íšŒì›ë²ˆí˜¸';
+COMMENT ON COLUMN tb_user.user_id IS 'íšŒì› ì•„ì´ë””';
+COMMENT ON COLUMN tb_user.user_pw IS 'íšŒì› ë¹„ë°€ë²ˆí˜¸';
+COMMENT ON COLUMN tb_user.user_name IS 'íšŒì›ì´ë¦„';
+COMMENT ON COLUMN tb_user.user_phone IS 'íšŒì› ì „í™”ë²ˆí˜¸';
+COMMENT ON COLUMN tb_user.user_email IS 'íšŒì› ì´ë©”ì¼';
+COMMENT ON COLUMN tb_user.user_regist_date IS 'íšŒì› ê°€ì…ì¼';
+COMMENT ON COLUMN tb_user.user_update_date IS 'íšŒì› ìˆ˜ì •ì¼';
+COMMENT ON COLUMN tb_user.user_login_date IS 'íšŒì› ìµœì¢…ë¡œê·¸ì¸ ì¼ì';
+COMMENT ON COLUMN tb_user.user_level IS 'íšŒì› ê¶Œí•œ ë“±ê¸‰(1:ê´€ë¦¬ì, 2:ê°•ì‚¬+ì¼ë°˜íšŒì›, 3:ì¼ë°˜íšŒì›(ê¸°ë³¸ê°’))';
 
---Ä«Å×°í¸® Å×ÀÌºí
+--ì¹´í…Œê³ ë¦¬ í…Œì´ë¸”
 CREATE TABLE tb_category(
 category_no NUMBER(6),
 category_name VARCHAR2(100) NOT NULL,
@@ -37,98 +39,104 @@ category_level NUMBER NOT NULL,
 CONSTRAINT tb_category_pk PRIMARY KEY(category_no)
 );
 
-COMMENT ON TABLE tb_category IS 'Ä«Å×°í¸® Å×ÀÌºí(°ü½ÉºĞ¾ß ¼³Á¤ °ü·Ã)';
-COMMENT ON COLUMN tb_category.category_no IS 'Ä«Å×°í¸® ¹øÈ£';
-COMMENT ON COLUMN tb_category.category_name IS 'Ä«Å×°í¸® ÀÌ¸§';
-COMMENT ON COLUMN tb_category.category_name IS '»óÀ§ Ä«Å×°í¸® ¹øÈ£ ex.ÇÑ½Ä, Áß½Ä ÀÖÀ¸¸é À½½ÄÀÌ¶ó´Â »óÀ§ ºĞ·ùÄÚµåÀÇ ¹øÈ£ ÀÔ·Â';
-COMMENT ON COLUMN tb_category.category_level IS 'Ä«Å×°í¸® Æ®¸® ´Ü°è';
+COMMENT ON TABLE tb_category IS 'ì¹´í…Œê³ ë¦¬ í…Œì´ë¸”(ê´€ì‹¬ë¶„ì•¼ ì„¤ì • ê´€ë ¨)';
+COMMENT ON COLUMN tb_category.category_no IS 'ì¹´í…Œê³ ë¦¬ ë²ˆí˜¸';
+COMMENT ON COLUMN tb_category.category_name IS 'ì¹´í…Œê³ ë¦¬ ì´ë¦„';
+COMMENT ON COLUMN tb_category.category_name IS 'ìƒìœ„ ì¹´í…Œê³ ë¦¬ ë²ˆí˜¸ ex.í•œì‹, ì¤‘ì‹ ìˆìœ¼ë©´ ìŒì‹ì´ë¼ëŠ” ìƒìœ„ ë¶„ë¥˜ì½”ë“œì˜ ë²ˆí˜¸ ì…ë ¥';
+COMMENT ON COLUMN tb_category.category_level IS 'ì¹´í…Œê³ ë¦¬ íŠ¸ë¦¬ ë‹¨ê³„';
 
 
---È¸¿ø,Ä«Å×°í¸® ¿¬°á Å×ÀÌºí
+--íšŒì›,ì¹´í…Œê³ ë¦¬ ì—°ê²° í…Œì´ë¸”
 CREATE TABLE tb_user_category_conn(
 user_no NUMBER(6),
 category_no NUMBER(6),
 CONSTRAINT tb_user_category_pk PRIMARY KEY(user_no, category_no),
-CONSTRAINT tb_user_cate_ufk FOREIGN KEY (user_no) REFERENCES tb_user(user_no) ON DELETE CASCADE, --user »èÁ¦ ½Ã Á¤º¸ »èÁ¦
-CONSTRAINT tb_user_cate_cfk FOREIGN KEY (category_no) REFERENCES tb_category(category_no) ON DELETE CASCADE  --category »èÁ¦ ½Ã Á¤º¸ »èÁ¦
+CONSTRAINT tb_user_cate_ufk FOREIGN KEY (user_no) REFERENCES tb_user(user_no) ON DELETE CASCADE, -- user ì‚­ì œ ì‹œ ì—°ê²° ì •ë³´ ì‚­ì œ
+CONSTRAINT tb_user_cate_cfk FOREIGN KEY (category_no) REFERENCES tb_category(category_no) ON DELETE SET NULL  -- category ì‚­ì œ ì‹œ null
 );
 
-COMMENT ON TABLE tb_user_category_conn IS 'È¸¿ø-°ü½ÉÄ«Å×°í¸® Á¤º¸ Å×ÀÌºí';
-COMMENT ON COLUMN tb_user_category_conn.user_no IS 'È¸¿ø¹øÈ£. È¸¿øÅ×ÀÌºíÀÇ È¸¿ø »èÁ¦ ½Ã ÇÔ²² »èÁ¦';
-COMMENT ON COLUMN tb_user_category_conn.category_no IS 'Ä«Å×°í¸® ¹øÈ£. Ä«Å×°í¸®Å×ÀÌºíÀÇ Ä«Å×°í¸® »èÁ¦ ½Ã ÇÔ²² »èÁ¦';
+COMMENT ON TABLE tb_user_category_conn IS 'íšŒì›-ê´€ì‹¬ì¹´í…Œê³ ë¦¬ ì •ë³´ í…Œì´ë¸”';
+COMMENT ON COLUMN tb_user_category_conn.user_no IS 'íšŒì›ë²ˆí˜¸. íšŒì›í…Œì´ë¸”ì˜ íšŒì› ì‚­ì œ ì‹œ í•¨ê»˜ ì‚­ì œ';
+COMMENT ON COLUMN tb_user_category_conn.category_no IS 'ì¹´í…Œê³ ë¦¬ ë²ˆí˜¸. ì¹´í…Œê³ ë¦¬í…Œì´ë¸”ì˜ ì¹´í…Œê³ ë¦¬ ì‚­ì œ ì‹œ í•¨ê»˜ ì‚­ì œ';
 
 
---Áö¿ª Å×ÀÌºí
+--ì§€ì—­ í…Œì´ë¸”
 CREATE TABLE tb_addr(
 addr_no NUMBER(6),
-addr_name VARCHAR2(30) NOT NULL,  --"Á¦ÁÖÆ¯º°ÀÚÄ¡µµ"°¡ °¡Àå ±ä ±ÛÀÚ°°¾Æ¿ä
+addr_name VARCHAR2(100) NOT NULL,  --"ì œì£¼íŠ¹ë³„ìì¹˜ë„"ê°€ ê°€ì¥ ê¸´ ê¸€ìê°™ì•„ìš”
 upper_addr_no NUMBER(6),
 addr_level NUMBER NOT NULL,
 CONSTRAINT tb_addr_pk PRIMARY KEY(addr_no)
 );
 
-COMMENT ON TABLE tb_addr IS 'Áö¿ª Å×ÀÌºí(°ü½ÉÁö¿ª ¼³Á¤ °ü·Ã)';
-COMMENT ON COLUMN tb_addr.addr_no IS 'Áö¿ª ¹øÈ£';
-COMMENT ON COLUMN tb_addr.addr_name IS 'Áö¿ª ÀÌ¸§';
-COMMENT ON COLUMN tb_addr.upper_addr_no IS '»óÀ§ Áö¿ª ¹øÈ£ ex.°­¼­±¸,°­µ¿±¸ ÀÖÀ¸¸é ¼­¿ïÆ¯º°½Ã¶ó´Â »óÀ§ºĞ·ù ÄÚµåÀÇ ¹øÈ£ ÀÔ·Â';
-COMMENT ON COLUMN tb_addr.addr_level IS 'Áö¿ª Æ®¸® ´Ü°è';
+COMMENT ON TABLE tb_addr IS 'ì§€ì—­ í…Œì´ë¸”(ê´€ì‹¬ì§€ì—­ ì„¤ì • ê´€ë ¨)';
+COMMENT ON COLUMN tb_addr.addr_no IS 'ì§€ì—­ ë²ˆí˜¸';
+COMMENT ON COLUMN tb_addr.addr_name IS 'ì§€ì—­ ì´ë¦„';
+COMMENT ON COLUMN tb_addr.upper_addr_no IS 'ìƒìœ„ ì§€ì—­ ë²ˆí˜¸ ex.ê°•ì„œêµ¬,ê°•ë™êµ¬ ìˆìœ¼ë©´ ì„œìš¸íŠ¹ë³„ì‹œë¼ëŠ” ìƒìœ„ë¶„ë¥˜ ì½”ë“œì˜ ë²ˆí˜¸ ì…ë ¥';
+COMMENT ON COLUMN tb_addr.addr_level IS 'ì§€ì—­ íŠ¸ë¦¬ ë‹¨ê³„';
 
 
---È¸¿ø,Áö¿ª ¿¬°á Å×ÀÌºí
+--íšŒì›,ì§€ì—­ ì—°ê²° í…Œì´ë¸”
 CREATE TABLE tb_user_addr_pick(
 user_no NUMBER(6),
 addr_no NUMBER(6),
 CONSTRAINT tb_user_addr_pick_pk PRIMARY KEY (user_no, addr_no),
-CONSTRAINT tb_user_addr_pick_ufk FOREIGN KEY (user_no) REFERENCES tb_user(user_no) ON DELETE CASCADE,
-CONSTRAINT tb_user_addr_pick_afk FOREIGN KEY (addr_no) REFERENCES tb_addr(addr_no) ON DELETE CASCADE
+CONSTRAINT tb_user_addr_pick_ufk FOREIGN KEY (user_no) REFERENCES tb_user(user_no) ON DELETE CASCADE, -- user ì‚­ì œ ì‹œ ì—°ê²°ì •ë³´ ì‚­ì œ
+CONSTRAINT tb_user_addr_pick_afk FOREIGN KEY (addr_no) REFERENCES tb_addr(addr_no) ON DELETE SET NULL -- addr ì‚­ì œ ì‹œ null ë³€ê²½
 );
 
+COMMENT ON TABLE tb_user_addr_pick IS 'íšŒì›-ê´€ì‹¬ì§€ì—­ ì •ë³´ í…Œì´ë¸”';
+COMMENT ON COLUMN tb_user_addr_pick.user_no IS 'íšŒì›ë²ˆí˜¸. íšŒì›í…Œì´ë¸”ì˜ íšŒì› ì‚­ì œ ì‹œ í•¨ê»˜ ì‚­ì œ';
+COMMENT ON COLUMN tb_user_addr_pick.category_no IS 'ì§€ì—­ ë²ˆí˜¸. ì¹´í…Œê³ ë¦¬í…Œì´ë¸”ì˜ ì¹´í…Œê³ ë¦¬ ì‚­ì œ ì‹œ í•¨ê»˜ ì‚­ì œ';
 
-COMMENT ON TABLE tb_user_addr_pick IS 'È¸¿ø-°ü½ÉÁö¿ª Á¤º¸ Å×ÀÌºí';
-COMMENT ON COLUMN tb_user_addr_pick.user_no IS 'È¸¿ø¹øÈ£. È¸¿øÅ×ÀÌºíÀÇ È¸¿ø »èÁ¦ ½Ã ÇÔ²² »èÁ¦';
-COMMENT ON COLUMN tb_user_addr_pick.category_no IS 'Áö¿ª ¹øÈ£. Ä«Å×°í¸®Å×ÀÌºíÀÇ Ä«Å×°í¸® »èÁ¦ ½Ã ÇÔ²² »èÁ¦';
 
-
---È¸¿ø ¼ö°­Æò Å×ÀÌºí
+--íšŒì› ìˆ˜ê°•í‰ í…Œì´ë¸”
 CREATE TABLE tb_class_review(
 class_review_no NUMBER(6),
+user_no NUMBER(6),   -- ì‘ì„±ì íšŒì›ë²ˆí˜¸
 class_no NUMBER(6) NOT NULL,
---teacher_no NUMBER(6), --È¸¿øÅ×ÀÌºí ÇÏ³ª·Î ÅëÇÕÇÏ±â·Î ÇßÀ¸´Ï user_no ÇÏ³ª..?
-user_no NUMBER(6) NOT NULL,
+--teacher_no NUMBER(6), --íšŒì›í…Œì´ë¸” í•˜ë‚˜ë¡œ í†µí•©í•˜ê¸°ë¡œ í–ˆìœ¼ë‹ˆ user_no í•˜ë‚˜..?
 class_review_point NUMBER NOT NULL,
-class_review_content VARCHAR2(4000) NOT NULL, --¶Ç´Â CLOB
+class_review_content CLOB NOT NULL,
 class_review_reg_date DATE Default SYSDATE,
-CONSTRAINT tb_class_review_pk PRIMARY KEY (user_no, class_review_no),
-
+CONSTRAINT tb_class_review_pk PRIMARY KEY (class_review_no, user_no), -- ì‘ì„±ì 1ëª…ë‹¹ ìˆ˜ê°•í‰ 1ê°œë§Œ
+CONSTRAINT tb_review_user_ufk FOREIGN KEY (user_no) REFERENCES tb_user(user_no) ON DELETE SET NULL,  -- userì‚­ì œ ì‹œ null
+CONSTRAINT tb_review_class_cfk FOREIGN KEY (class_no) REFERENCES tb_class(class_no)   -- ì‚­ì œë¶ˆê°€
 );
 
+COMMENT ON TABLE tb_class_review IS 'íšŒì› ìˆ˜ê°•í‰ í…Œì´ë¸”';
+COMMENT ON COLUMN tb_class_review.class_review_no IS 'ìˆ˜ê°•í‰ ê¸€ë²ˆí˜¸';
+COMMENT ON COLUMN tb_class_review.user_no IS 'ì‘ì„±ì íšŒì›ë²ˆí˜¸';
+COMMENT ON COLUMN tb_class_review.class_no IS 'ê°•ì˜ ë²ˆí˜¸';
+COMMENT ON COLUMN tb_class_review.class_review_point IS 'ê°•ì˜ í‰ì . 5ì  ë˜ëŠ” 10ì ';
+COMMENT ON COLUMN tb_class_review.class_review_content IS 'ìˆ˜ê°•í‰ ê¸€ë‚´ìš©';
+COMMENT ON COLUMN tb_class_review.class_review_reg_date IS 'ìˆ˜ê°•í‰ ì‘ì„±ì¼';
 
---°ü¸®ÀÚ ÀÌ¿ë¹®ÀÇ Å×ÀÌºí
+
+--ê´€ë¦¬ì ì´ìš©ë¬¸ì˜ í…Œì´ë¸”
 CREATE TABLE tb_admin_qna(
 admin_qna_no NUMBER(6),
 user_no NUMBER(6),
-admin_qna_writer_id VARCHAR2(20),
-admin_qna_title VARCHAR2(600),   --º¸Åë ±æ°Ô´Â 200ÀÚ Á¤µµ µé¾î°¡´Â °Í °°¾Æ¿ä.
-admin_qna_content VARCHAR2(4000),--ÀÏ´ÜÀº 4000byteÀÎµ¥, CLOBÀÌ¶ó´Â µ¥ÀÌÅÍÇü½ÄÀÌ ³ªÀ» ¼öµµ ÀÖÀ» °Í °°¾Æ¿ä
+admin_qna_writer_id VARCHAR2(100),
+admin_qna_title VARCHAR2(600),   -- í•œê¸€ ìµœëŒ€ 200ì ê¸°ì¤€
+admin_qna_content CLOB,
 admin_qna_writer_level VARCHAR2(1),
 admin_qna_reg_date DATE DEFAULT SYSDATE,
 admin_qna_group_no NUMBER(6),
 admin_qna_depth NUMBER(6),
 admin_qna_origin_no NUMBER(6),
 CONSTRAINT tb_admin_qna_pk PRIMARY KEY(admin_qna_no),
-CONSTRAINT tb_admin_qna_user_fk FOREIGN KEY (user_no) REFERENCES tb_user(user_no) ON DELETE SET NULL
+CONSTRAINT tb_admin_qna_user_ufk FOREIGN KEY (user_no) REFERENCES tb_user(user_no) ON DELETE SET NULL
 );
 
-COMMENT ON TABLE tb_admin_qna IS '°ü¸®ÀÚ/À¥ÆäÀÌÁö ÀÌ¿ë¹®ÀÇ Å×ÀÌºí';
-COMMENT ON COLUMN tb_admin_qna.admin_qna_no IS '¹®ÀÇ±Û ¹øÈ£';
-COMMENT ON COLUMN tb_admin_qna.user_no IS '¹®ÀÇ±Û ÀÛ¼ºÀÚ È¸¿ø¹øÈ£';
-COMMENT ON COLUMN tb_admin_qna.admin_qna_writer_id IS '¹®ÀÇ±Û ÀÛ¼ºÀÚ ¾ÆÀÌµğ';
-COMMENT ON COLUMN tb_admin_qna.admin_qna_title IS '¹®ÀÇ±Û Á¦¸ñ';
-COMMENT ON COLUMN tb_admin_qna.admin_qna_content IS '¹®ÀÇ±Û ³»¿ë';
-COMMENT ON COLUMN tb_admin_qna.admin_qna_writer_level IS '¹®ÀÇ±Û È¸¿ø ·¹º§';
-COMMENT ON COLUMN tb_admin_qna.admin_qna_reg_date IS '¹®ÀÇ±Û ÀÛ¼ºÀÏ';
-COMMENT ON COLUMN tb_admin_qna.admin_qna_group_no IS '¹®ÀÇ±Û °èÃşÇü ±×·ìno';
-COMMENT ON COLUMN tb_admin_qna.admin_qna_depth IS '¹®ÀÇ±Û °èÃşÇü depth(°èÃş´Ü°è)';
-COMMENT ON COLUMN tb_admin_qna.admin_qna_origin_no IS '¹®ÀÇ±Û °èÃşÇü ºÎ¸ğ±Û';
-
-
+COMMENT ON TABLE tb_admin_qna IS 'ê´€ë¦¬ì/ì›¹í˜ì´ì§€ ì´ìš©ë¬¸ì˜ í…Œì´ë¸”';
+COMMENT ON COLUMN tb_admin_qna.admin_qna_no IS 'ë¬¸ì˜ê¸€ ë²ˆí˜¸';
+COMMENT ON COLUMN tb_admin_qna.user_no IS 'ë¬¸ì˜ê¸€ ì‘ì„±ì íšŒì›ë²ˆí˜¸';
+COMMENT ON COLUMN tb_admin_qna.admin_qna_writer_id IS 'ë¬¸ì˜ê¸€ ì‘ì„±ì ì•„ì´ë””';
+COMMENT ON COLUMN tb_admin_qna.admin_qna_title IS 'ë¬¸ì˜ê¸€ ì œëª©';
+COMMENT ON COLUMN tb_admin_qna.admin_qna_content IS 'ë¬¸ì˜ê¸€ ë‚´ìš©';
+COMMENT ON COLUMN tb_admin_qna.admin_qna_writer_level IS 'ë¬¸ì˜ê¸€ íšŒì› ë ˆë²¨';
+COMMENT ON COLUMN tb_admin_qna.admin_qna_reg_date IS 'ë¬¸ì˜ê¸€ ì‘ì„±ì¼';
+COMMENT ON COLUMN tb_admin_qna.admin_qna_group_no IS 'ë¬¸ì˜ê¸€ ê³„ì¸µí˜• ê·¸ë£¹no';
+COMMENT ON COLUMN tb_admin_qna.admin_qna_depth IS 'ë¬¸ì˜ê¸€ ê³„ì¸µí˜• depth(ê³„ì¸µë‹¨ê³„)';
+COMMENT ON COLUMN tb_admin_qna.admin_qna_origin_no IS 'ë¬¸ì˜ê¸€ ê³„ì¸µí˜• ë¶€ëª¨ê¸€';
